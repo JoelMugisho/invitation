@@ -2,7 +2,7 @@
 
 ## Présentation du projet
 
-Je débute en programmation et je veux apprendre à construire une application web progressive (PWA) de gestion d'événements. Je veux comprendre les choix techniques et écrire le code moi-même avec l'aide de Cursor.
+je veux construire une application web progressive (PWA) de gestion d'événements. Je veux comprendre les choix techniques et écrire le code moi-même avec l'aide de Cursor.
 
 La plateforme pourra couvrir plusieurs besoins : invitations à des événements privés, billetterie pour des événements publics, collecte de fonds, pétitions et sondages. Une marketplace en marque grise est envisagée plus tard et n'est pas prioritaire. Il s'agit d'une application web/PWA, pas d'une application mobile native.
 
