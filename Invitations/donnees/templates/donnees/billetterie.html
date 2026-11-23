@@ -1,0 +1,47 @@
+{% extends "donnees/base.html" %}
+{% block titre %}Billetterie — Mugi{% endblock %}
+{% block hero %}
+<section class="hero-grille" aria-labelledby="titre">
+  <div>
+    <p class="fil">Accueil / Billetterie</p>
+    <h1 id="titre">Vendez vos billets en ligne, encaissez par mobile money</h1>
+    <p>Créez vos catégories de billets, partagez votre lien de vente et suivez chaque achat. Chaque billet porte un QR code unique et une signature numérique contre la fraude.</p>
+    <div class="actions-hero">
+      <a class="bouton bouton-clair" href="/organiser">Créer ma billetterie</a>
+      <a class="bouton bouton-ligne" href="/marketplace">Voir la Marketplace</a>
+    </div>
+  </div>
+  <article class="carte" aria-label="Exemple de billet">
+    <p class="fil" style="color:var(--discret)">Forum Tech &amp; Paiements digitaux</p>
+    <h2 style="font-size:1.4rem">VIP · 25 $</h2>
+    <p>9 nov. 2026 · Kinshasa<br>MG-2026-04857</p>
+  </article>
+</section>
+{% endblock %}
+{% block contenu %}
+<section class="section" aria-labelledby="titre-complet">
+  <div class="largeur">
+    <h2 id="titre-complet">Une billetterie complète, <span class="accent">sans complication</span></h2>
+    <p class="intro">Tout ce qu'il faut pour vendre, encaisser et contrôler, depuis une seule plateforme.</p>
+    <div class="cartes">
+      <article class="carte"><div class="icone">1</div><h3>Types de billets et quotas</h3><p>Standard, VIP, VVIP. Fixez le prix, le nombre de places et la période de vente.</p></article>
+      <article class="carte"><div class="icone">2</div><h3>Codes promo</h3><p>Créez des codes de réduction pour vos partenaires, vos membres ou vos ventes anticipées.</p></article>
+      <article class="carte"><div class="icone">3</div><h3>Mobile money et carte</h3><p>Vos acheteurs paient avec leur mobile money ou leur carte bancaire.</p></article>
+      <article class="carte"><div class="icone">4</div><h3>QR code unique et signé</h3><p>Chaque billet a son QR code et sa signature numérique.</p></article>
+      <article class="carte"><div class="icone">5</div><h3>Envoi par e-mail ou WhatsApp</h3><p>Après le paiement, le billet arrive automatiquement.</p></article>
+      <article class="carte"><div class="icone">6</div><h3>Ventes en temps réel</h3><p>Suivez les ventes, les revenus et les transactions.</p></article>
+    </div>
+  </div>
+</section>
+<section class="section bande" aria-labelledby="titre-config">
+  <div class="largeur">
+    <h2 id="titre-config">Exemple de configuration</h2>
+    <p>Chaque catégorie a son prix, son quota et sa période de vente. Les ventes se mettent à jour en direct.</p>
+    <div class="tarifs">
+      <article class="tarif"><h3>Standard</h3><p>10 $</p><div class="barre"><i style="width:40%"></i></div><p>20 vendus sur 200</p></article>
+      <article class="tarif"><h3>VIP</h3><p>25 $</p><div class="barre"><i style="width:64%"></i></div><p>64 vendus sur 100</p></article>
+      <article class="tarif"><h3>VVIP</h3><p>50 $</p><div class="barre"><i style="width:30%"></i></div><p>30 vendus sur 50</p></article>
+    </div>
+  </div>
+</section>
+{% endblock %}

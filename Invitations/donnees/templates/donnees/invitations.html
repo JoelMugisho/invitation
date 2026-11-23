@@ -1,0 +1,41 @@
+{% extends "donnees/base.html" %}
+{% block titre %}Invitations digitales — Mugi{% endblock %}
+{% block hero %}
+<section class="hero-grille" aria-labelledby="titre">
+  <div>
+    <p class="fil">Accueil / Invitations</p>
+    <h1 id="titre">Des invitations digitales qui marquent les esprits</h1>
+    <p>Créez une invitation à votre image, envoyez à chaque invité un lien unique par WhatsApp et suivez les confirmations en temps réel. Le jour J, vérifiez les entrées avec un simple smartphone.</p>
+    <div class="actions-hero">
+      <a class="bouton bouton-clair" href="/organiser">Créer une invitation</a>
+      <a class="bouton bouton-ligne" href="/#types">Voir les modèles</a>
+    </div>
+  </div>
+  <article class="telephone" aria-label="Aperçu de l'invitation">
+    <div class="ecran">
+      <img src="/visuels/mariage.jpg" alt="Couple le jour du mariage">
+      <div class="corps">
+        <strong>Grâce &amp; Patrick</strong>
+        <small>Samedi 19 décembre 2026 · 19 h<br>Salle Le Palmier, Kinshasa</small>
+        <div class="choix"><span class="oui">Oui</span><span>Peut-être</span><span>Non</span></div>
+      </div>
+    </div>
+  </article>
+</section>
+{% endblock %}
+{% block contenu %}
+<section class="section" aria-labelledby="titre-invites">
+  <div class="largeur">
+    <h2 id="titre-invites">Tout pour gérer vos <span class="accent">invités</span></h2>
+    <p class="intro">De l'envoi des liens jusqu'à l'entrée dans la salle, chaque étape est suivie et sécurisée.</p>
+    <div class="cartes">
+      <article class="carte"><div class="icone">1</div><h3>Lien unique et sécurisé</h3><p>Chaque invité reçoit son propre lien, impossible à deviner. Personne ne peut répondre à sa place.</p></article>
+      <article class="carte"><div class="icone">2</div><h3>Envoi par WhatsApp</h3><p>Partagez tous les liens en un clic, ou envoyez-les un par un.</p></article>
+      <article class="carte"><div class="icone">3</div><h3>Confirmation de présence</h3><p>Vos invités confirment ou déclinent en un clic, et vous suivez les réponses en direct.</p></article>
+      <article class="carte"><div class="icone">4</div><h3>Choix des boissons</h3><p>Avant de confirmer, chaque invité indique ce qu'il préfère.</p></article>
+      <article class="carte"><div class="icone">5</div><h3>Import de la liste</h3><p>Partez d'un fichier pour remplir la liste des invités.</p></article>
+      <article class="carte"><div class="icone">6</div><h3>Tables et champs personnalisés</h3><p>Ajoutez les informations qui comptent pour votre événement.</p></article>
+    </div>
+  </div>
+</section>
+{% endblock %}

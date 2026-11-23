@@ -1,78 +1,483 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Plateforme de gestion d'événements</title>
-  <style>
-    :focus-visible { outline: 2px solid #14532d; outline-offset: 3px; }
-    body { margin: 0; font-family: "Segoe UI", sans-serif; color: #1c1917; background: #faf7f2; line-height: 1.6; }
-    header, main, footer { max-width: 46rem; margin: 0 auto; padding: 1rem 1.25rem; }
-    header { position: sticky; top: 0; background: #faf7f2; border-bottom: 1px solid #e7e5e4; }
-    nav ul { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; padding: 0; margin: 0.5rem 0 0; list-style: none; }
-    a { color: #14532d; }
-    h1, h2 { line-height: 1.2; }
-    section { padding: 1.5rem 0; border-bottom: 1px solid #e7e5e4; }
-    .note { color: #44403c; }
-  </style>
-</head>
-<body>
-  <a href="#contenu">Aller au contenu</a>
-  <header>
-    <strong>Plateforme de gestion d'événements</strong>
-    <nav aria-label="Sections de la page">
-      <ul>
-        <li><a href="#accueil">Accueil</a></li>
-        <li><a href="#organiser">Organiser</a></li>
-        <li><a href="#invitations">Invitations</a></li>
-        <li><a href="#billetterie">Billetterie</a></li>
-        <li><a href="#collecte">Collecte</a></li>
-        <li><a href="#petitions-sondages">Pétitions et sondages</a></li>
-        <li><a href="#marketplace">Marketplace</a></li>
-      </ul>
-    </nav>
-  </header>
-  <main id="contenu">
-    <section id="accueil">
-      <h1>Préparer un événement, du cercle privé au public</h1>
-      <p>Cette plateforme est prévue pour inviter des personnes nommées, suivre une billetterie publique, recueillir des fonds, ou proposer une pétition ou un sondage. Elle s'ouvre dans le navigateur.</p>
-      <p class="note">Cette page ne crée pas de compte et n'accepte pas de paiement.</p>
-      <p><a href="#organiser">Voir comment organiser</a></p>
-    </section>
-    <section id="organiser">
-      <h2>Comment la plateforme peut aider</h2>
-      <p>L'organisateur décrit son événement, choisit le besoin qui correspond, puis suit les retours. Les fonctions se construisent service par service. Invitations est le premier.</p>
-      <h3>Choisir le cadre</h3>
-      <p>Un événement privé s'adresse à des personnes nommées. Un événement public peut accueillir plus de monde, avec des billets.</p>
-      <h3>Préparer les informations utiles</h3>
-      <p>Le titre, le lieu, la date et le message expliquent ce qui est proposé.</p>
-      <h3>Suivre les retours</h3>
-      <p>L'objectif est de savoir qui répond. Ces suivis ne sont pas encore tous disponibles.</p>
-    </section>
-    <section id="invitations">
-      <h2>Invitations</h2>
-      <p>Pour les événements privés : fête, deuil, culte, journée portes ouvertes. L'organisateur sait à qui il s'adresse.</p>
-      <p>Des collaborateurs, des modèles, les réponses des invités, les accompagnants, l'envoi et le contrôle à l'entrée sont envisagés. Cette page ne crée pas encore d'invitation.</p>
-    </section>
-    <section id="billetterie">
-      <h2>Billetterie</h2>
-      <p>Service ultérieur, pour les événements publics. Deux modes sont prévus : des billets imprimés par l'organisateur, dont la plateforme suivrait seulement les quantités, ou des billets émis par la plateforme. Aucun tarif ni paiement ici.</p>
-    </section>
-    <section id="collecte">
-      <h2>Collecte de fonds</h2>
-      <p>La plateforme pourra servir à recueillir des fonds liés à un événement. Le fonctionnement et les moyens de paiement ne sont pas encore définis.</p>
-    </section>
-    <section id="petitions-sondages">
-      <h2>Pétitions et sondages</h2>
-      <p>Une pétition pour soutenir une demande, un sondage pour connaître un avis. Leur forme exacte n'est pas encore décidée.</p>
-    </section>
-    <section id="marketplace">
-      <h2>Marketplace en marque grise</h2>
-      <p>Envisagée plus tard, et non prioritaire. Aucune offre ni aucun partenaire aujourd'hui.</p>
-    </section>
-  </main>
-  <footer>
-    <p>Page de présentation. Les services commencent par les invitations.</p>
-  </footer>
-</body>
-</html>
+{% extends "donnees/base.html" %}
+{% block titre %}Mugi — Créer et organiser vos événements{% endblock %}
+
+{% block styles %}
+<style>
+  /* ===== Accueil : maquette mugi-assets/01-pages/page-01-accueil (1920 px) ===== */
+
+  /* S01 Héros : fond sombre + texte et mosaïque dans la même largeur centrée */
+  .hero-photo {
+    background: #000 url('/visuels/maquette/photo__market-hero__concert__640x500.jpg') 22% 30% / cover no-repeat;
+    min-height: var(--hero-haut);
+    padding-bottom: 0;
+  }
+  .hero-photo::before {
+    content: ""; position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(90deg, rgba(0,0,0,.6) 0%, rgba(0,0,0,.35) 48%, rgba(0,0,0,.4) 100%);
+  }
+  .hero-photo > .largeur {
+    display: flex; flex-direction: column;
+    min-height: var(--hero-haut);
+  }
+  .accueil-layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(24px, 3vw, 48px);
+    align-items: center;
+    padding: clamp(12px, 1.5vw, 24px) 0 clamp(48px, 4vw, 72px);
+    position: relative; z-index: 2;
+  }
+  .accueil-hero {
+    max-width: 34rem;
+    padding: 0;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .accueil-hero h1 {
+    font-weight: 700; letter-spacing: -0.04em; margin-bottom: 0.55em;
+    font-size: clamp(36px, 3vw, 52px); line-height: 1.1;
+  }
+  .accueil-hero p { font-size: clamp(16px, 0.95vw, 18px); max-width: 34rem; margin-bottom: 0; color: rgba(255,255,255,.92); }
+  .accueil-hero .bouton { margin-top: clamp(24px, 2.4vw, 40px); align-self: flex-start; width: auto; }
+  .mosaique {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: clamp(12px, 1.2vw, 18px);
+    align-content: center;
+  }
+  .mosaique img {
+    position: static; width: 100%; height: 100%;
+    object-fit: cover; border-radius: clamp(18px, 1.4vw, 26px);
+  }
+  .mosaique .m1 { aspect-ratio: 466 / 316; }
+  .mosaique .m2 { aspect-ratio: 466 / 418; grid-row: 2; }
+  .mosaique .m3 { aspect-ratio: 466 / 460; }
+  .mosaique .m4 { aspect-ratio: 504 / 280; grid-row: 2; }
+
+  /* S02 À propos */
+  .apropos { display: grid; grid-template-columns: minmax(0, 780fr) minmax(0, 686fr); gap: clamp(28px, 4vw, 64px); align-items: center; }
+  .apropos-photo { position: relative; margin-left: calc(-1 * min(24px, var(--marge))); }
+  .apropos-photo img { width: 100%; border-radius: clamp(18px, 1.2vw, 22px); aspect-ratio: 780 / 651; object-fit: cover; object-position: left center; }
+  .apropos-photo .lecture {
+    position: absolute; right: 0; top: 50%; transform: translate(50%, -50%);
+    width: clamp(56px, 4vw, 72px); height: clamp(56px, 4vw, 72px);
+  }
+  .apropos-photo .lecture:hover { transform: translate(50%, -50%) scale(1.06); }
+  .apropos h2 { font-size: clamp(26px, 2.1vw, 36px); }
+  .apropos p { max-width: 480px; margin-bottom: clamp(20px, 1.8vw, 32px); }
+
+  /* S03 Nos services : deux colonnes décalées */
+  .services { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; position: relative; z-index: 2; }
+  .services-col { display: flex; flex-direction: column; gap: 28px; }
+  .services-tete { padding-top: 6px; margin-bottom: 28px; max-width: 420px; }
+  .services-tete h2 { font-size: clamp(28px, 2.4vw, 40px); margin-bottom: 0.55em; }
+  .services .carte h3 { font-size: clamp(18px, 1.1vw, 20px); font-weight: 500; margin-bottom: 0.9em; }
+  .services .carte p { margin-bottom: 1em; }
+
+  /* S04 Modèles : grille 2 colonnes, colonne droite décalée */
+  .centre { text-align: center; }
+  .centre .intro { margin: 0 auto; }
+  #titre-modeles { font-size: clamp(28px, 2.4vw, 40px); }
+  .modeles { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(18px, 1.6vw, 28px); margin-top: clamp(28px, 2.4vw, 48px); }
+  .modeles-col { display: flex; flex-direction: column; gap: clamp(28px, 2vw, 40px); }
+  .voir-tout {
+    display: inline-flex; align-items: center; gap: 12px; align-self: flex-end;
+    font-size: clamp(15px, 0.95vw, 17px); font-weight: 600; color: var(--mugi-fonce);
+    height: auto; margin-bottom: clamp(0px, 0.8vw, 12px);
+  }
+  .voir-tout svg { width: 28px; height: 28px; stroke-width: 1.5; }
+  .voir-tout:hover { color: var(--mugi-clair); }
+  .modele-carte img { width: 100%; aspect-ratio: 773 / 600; object-fit: cover; border-radius: clamp(18px, 1.2vw, 22px); }
+  .modele-carte h3 { color: var(--mugi-clair); font-size: clamp(22px, 1.5vw, 28px); font-weight: 500; letter-spacing: -0.01em; margin: 0.7em 0 0.4em; }
+  .modele-carte p { font-size: clamp(15px, 0.85vw, 16px); }
+  .modele-carte .lien-souligne { color: var(--mugi-clair); border-color: rgba(0,0,0,.45); font-size: clamp(14px, 0.8vw, 15px); }
+
+  /* S05 FAQ */
+  .faq { margin-top: clamp(28px, 2.8vw, 48px); max-width: 1120px; }
+  .faq details { border-bottom: 1px solid rgba(255,255,255,.75); max-width: 100%; position: relative; }
+  .faq summary {
+    list-style: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: clamp(16px, 1.2vw, 22px) 0;
+    font-size: clamp(16px, 1vw, 18px); font-weight: 500; line-height: 1.25;
+    margin-right: 0;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq .rond {
+    flex: none; width: 32px; height: 32px; border-radius: 50%;
+    border: 1.5px solid var(--mugi-blanc); display: grid; place-items: center;
+    transition: transform 0.2s ease;
+  }
+  .faq .rond .ic { width: 16px; height: 16px; }
+  .faq details[open] .rond { transform: rotate(180deg); }
+  .faq details p { margin: -4px 0 clamp(16px, 1.2vw, 22px); font-size: clamp(15px, 0.85vw, 16px); max-width: 56rem; }
+
+  /* S06 Témoignages : carrousel */
+  .temoins { position: relative; margin-top: clamp(28px, 2.4vw, 48px); }
+  .temoins-piste {
+    display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory;
+    scroll-behavior: smooth; padding: 12px 4px 28px; margin: 0 clamp(0px, 3.5vw, 56px);
+    scrollbar-width: none;
+  }
+  .temoins-piste::-webkit-scrollbar { display: none; }
+  .temoin {
+    flex: 0 0 calc(50% - 10px); scroll-snap-align: start;
+    background: var(--mugi-blanc); border-radius: 22px; box-shadow: var(--ombre);
+    padding: clamp(18px, 1.2vw, 24px);
+  }
+  .temoin-tete { display: flex; align-items: center; gap: 14px; }
+  .avatar { width: clamp(48px, 3.2vw, 56px); height: clamp(48px, 3.2vw, 56px); border-radius: 50%; background: #444; flex: none; }
+  .temoin:nth-child(even) .avatar { background: #000; }
+  .temoin-tete strong { display: block; font-size: clamp(15px, 0.9vw, 16px); font-weight: 600; }
+  .temoin-tete small { display: block; font-size: 13px; font-weight: 600; margin-top: 4px; }
+  .etoiles { display: flex; gap: 2px; color: var(--mugi-clair); margin: clamp(14px, 1.1vw, 20px) 0 clamp(10px, 0.9vw, 14px); }
+  .etoiles .ic { width: 18px; height: 18px; }
+  .temoin p { font-size: 14px; line-height: 1.65; margin: 0; }
+  .fleche-rond {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 2;
+    width: clamp(40px, 2.6vw, 48px); height: clamp(40px, 2.6vw, 48px); border-radius: 50%; border: 0;
+    display: grid; place-items: center; cursor: pointer; color: var(--mugi-blanc);
+    background: var(--mugi-degrade); transition: opacity 0.2s ease, box-shadow 0.2s ease;
+  }
+  .fleche-rond:hover { box-shadow: 0 10px 24px rgba(0,0,0,.18); }
+  .fleche-rond:disabled { background: rgba(193, 107, 46, 0.3); cursor: default; box-shadow: none; }
+  .fleche-rond.prec { left: 0; }
+  .fleche-rond.suiv { right: 0; }
+  .note-exemple { text-align: center; font-size: 13px; color: var(--discret); margin: 0; }
+
+  /* S07 Conseils (blog) */
+  .conseils-tete { display: grid; grid-template-columns: 1fr minmax(0, 420px); gap: 28px; align-items: start; padding-bottom: clamp(24px, 2.2vw, 40px); border-bottom: 1.5px solid rgba(0,0,0,.4); }
+  .conseils-tete h2 { font-size: clamp(26px, 2.1vw, 36px); line-height: 1.25; margin: 0; }
+  .conseils-tete p { font-size: 14px; margin: 0.6em 0 0; }
+  .conseils { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: clamp(28px, 2.8vw, 48px); }
+  .conseil h3 { font-size: clamp(17px, 1.05vw, 19px); font-weight: 500; line-height: 1.3; margin-bottom: 0.5em; }
+  .conseil p { font-size: 14px; margin-bottom: 1.2em; }
+  .conseil img { width: 100%; aspect-ratio: 512 / 383; object-fit: cover; border-radius: clamp(16px, 1.1vw, 20px); }
+
+  /* Overlay « Toutes les fonctionnalités » */
+  .panneau-fonctions { display: grid; grid-template-columns: 1fr 1.1fr; }
+  .panneau-video { position: relative; min-height: 320px; background: #000 url('/visuels/maquette/photo__a-propos__fete__780x651.jpg') 30% center / cover; color: var(--mugi-blanc); }
+  .panneau-video::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.65) 100%); }
+  .panneau-video .rond-lecture {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 72px; height: 72px; border-radius: 50%; background: var(--mugi-blanc); color: var(--mugi-clair);
+    display: grid; place-items: center;
+  }
+  .panneau-video .rond-lecture svg { width: 28px; height: 28px; fill: currentColor; stroke: none; margin-left: 4px; }
+  .panneau-video .legende { position: absolute; left: 24px; right: 24px; bottom: 24px; z-index: 1; }
+  .panneau-video .legende strong { display: block; font-size: clamp(18px, 1.1vw, 20px); font-weight: 700; }
+  .panneau-video .legende span { color: rgba(255,255,255,.85); font-size: 14px; }
+  .panneau-liste { padding: clamp(20px, 1.8vw, 32px); }
+  .panneau-liste h2 { font-size: clamp(22px, 1.4vw, 26px); font-weight: 800; letter-spacing: -0.03em; margin: 0 48px 0.35em 0; }
+  .panneau-liste > p { margin-bottom: 1em; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 980px) {
+    .hero-photo { min-height: 0; }
+    .hero-photo > .largeur { min-height: 0; }
+    .accueil-layout {
+      grid-template-columns: 1fr;
+      padding: 8px 0 40px;
+      gap: 28px;
+    }
+    .accueil-hero { max-width: none; }
+    .accueil-hero h1 { font-size: clamp(28px, 7vw, 36px); }
+    .accueil-hero p { font-size: 16px; }
+    .mosaique { gap: 10px; }
+    .mosaique img { border-radius: 18px; max-height: 160px; }
+    .apropos, .services, .modeles, .conseils-tete, .conseils, .panneau-fonctions { grid-template-columns: 1fr; }
+    .apropos-photo { margin-left: 0; }
+    .apropos-photo .lecture { transform: translate(25%, -50%); }
+    .apropos-photo .lecture:hover { transform: translate(25%, -50%); }
+    .services-tete { margin-bottom: 10px; }
+    .services-col, .modeles-col { gap: 24px; }
+    .services { gap: 24px; }
+    .voir-tout { align-self: flex-start; }
+    .faq summary { margin-right: 0; }
+    .temoin { flex-basis: 100%; }
+    .temoins-piste { margin: 0; }
+    .temoins { display: grid; grid-template-columns: auto auto; justify-content: center; gap: 0 16px; }
+    .temoins-piste { grid-column: 1 / -1; order: -1; }
+    .fleche-rond { position: static; transform: none; }
+    .conseils-tete h2 br, #titre-modeles br { display: none; }
+    .panneau-video { min-height: 220px; }
+    .panneau-video .rond-lecture { width: 64px; height: 64px; }
+    .panneau-video .legende { left: 20px; bottom: 16px; }
+  }
+  @media (max-width: 600px) {
+    .accueil-layout { padding-bottom: 32px; }
+    .mosaique .m1, .mosaique .m2, .mosaique .m3, .mosaique .m4 { aspect-ratio: 4 / 3; }
+    .mosaique img { max-height: 120px; }
+  }
+</style>
+{% endblock %}
+
+{% block hero_classe %}hero-photo{% endblock %}
+{% block hero_fond %}{% endblock %}
+
+{% block hero %}
+<div class="accueil-layout">
+  <section class="accueil-hero" aria-labelledby="titre">
+    <h1 id="titre">Créer et organiser vos événements en toute simplicité.</h1>
+    <p>Nous vous permettons de créer et de promouvoir vos concerts, conférences, soirées et festivals. Simplifiez vos inscriptions et rassemblez votre public autour de chaque événement.</p>
+    <a class="bouton" href="/invitations">Commencez</a>
+  </section>
+  <div class="mosaique" aria-hidden="true">
+    <img class="m1" src="/visuels/maquette/photo__hero-accueil__carte-haut-gauche__diner-gala__466x316.jpg" alt="">
+    <img class="m3" src="/visuels/maquette/photo__hero-accueil__carte-haut-droite__festival__466x460.jpg" alt="">
+    <img class="m2" src="/visuels/maquette/photo__hero-accueil__carte-bas-gauche__mariage__466x418.jpg" alt="">
+    <img class="m4" src="/visuels/maquette/photo__evenement__forum-tech-paiements__504x280.jpg" alt="">
+  </div>
+</div>
+{% endblock %}
+
+{% block contenu %}
+<!-- S02 À propos -->
+<section class="section" aria-labelledby="titre-apropos" style="padding-top: clamp(64px, 5.61vw, 107px)">
+  <div class="largeur apropos">
+    <div class="apropos-photo">
+      <img src="/visuels/maquette/photo__a-propos__fete__780x651.jpg" alt="Des amis fêtent un anniversaire autour d'un gâteau">
+      <button class="lecture" type="button" id="ouvrir-fonctions" aria-label="Voir toutes les fonctionnalités" aria-haspopup="dialog">
+        <svg aria-hidden="true"><use href="/visuels/maquette/icones.svg#play"/></svg>
+      </button>
+    </div>
+    <div>
+      <h2 id="titre-apropos">Nous simplifions la création et <span class="mot">la gestion de vos événements.</span></h2>
+      <p>Créez votre événement, présentez votre programme et ouvrez les inscriptions en quelques clics. Concerts, conférences, soirées ou festivals : réunissez votre public et gérez chaque étape depuis une seule plateforme.</p>
+      <a class="bouton" href="/a-propos">En savoir plus</a>
+    </div>
+  </div>
+</section>
+
+<!-- S03 Nos services -->
+<section class="section bande" id="services" aria-labelledby="titre-services">
+  <div class="anneaux" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="largeur services">
+    <div class="services-col">
+      <div class="services-tete">
+        <h2 id="titre-services">Nos Services</h2>
+        <p>Une seule plateforme pour inviter, vendre vos billets, contrôler les entrées et suivre vos résultats, sans compétence technique.</p>
+      </div>
+      <article class="carte">
+        <div class="icone" aria-hidden="true"><svg class="ic"><use href="/visuels/maquette/icones.svg#mail"/></svg></div>
+        <h3>Invitations digitales</h3>
+        <p>Créez une invitation personnalisée et envoyez à chaque invité un lien unique via WhatsApp. Suivez les confirmations de présence en temps réel.</p>
+        <a class="lien-souligne" href="/invitations">En savoir plus</a>
+      </article>
+      <article class="carte">
+        <div class="icone" aria-hidden="true"><svg class="ic"><use href="/visuels/maquette/icones.svg#heart-handshake"/></svg></div>
+        <h3>Collecte de fonds</h3>
+        <p>Lancez une campagne avec un objectif chiffré, une jauge de progression et des reçus de don, après validation de votre dossier.</p>
+        <a class="lien-souligne" href="/collecte">En savoir plus</a>
+      </article>
+    </div>
+    <div class="services-col">
+      <article class="carte">
+        <div class="icone" aria-hidden="true"><svg class="ic"><use href="/visuels/maquette/icones.svg#ticket"/></svg></div>
+        <h3>Billetterie en ligne</h3>
+        <p>Vendez vos billets par mobile money ou par carte. Chaque billet porte un QR code unique et signé, envoyé par e-mail ou WhatsApp.</p>
+        <a class="lien-souligne" href="/billetterie">En savoir plus</a>
+      </article>
+      <article class="carte">
+        <div class="icone" aria-hidden="true"><svg class="ic"><use href="/visuels/maquette/icones.svg#qr-code"/></svg></div>
+        <h3>Contrôle d'accès QR</h3>
+        <p>Vos agents scannent les QR codes depuis un simple smartphone. Les doubles entrées sont bloquées et les arrivées suivies en direct.</p>
+        <a class="lien-souligne" href="/invitations">En savoir plus</a>
+      </article>
+      <article class="carte">
+        <div class="icone" aria-hidden="true"><svg class="ic"><use href="/visuels/maquette/icones.svg#file-pen-line"/></svg></div>
+        <h3>Pétition et sondage</h3>
+        <p>Recueillez des signatures en ligne et suivez le compteur en direct. Les sondages arrivent bientôt.</p>
+        <a class="lien-souligne" href="/petition">En savoir plus</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- S04 Modèles -->
+<section class="section" id="modeles" aria-labelledby="titre-modeles">
+  <div class="largeur">
+    <div class="centre">
+      <h2 id="titre-modeles">Des modèles pour<br>chaque <span class="mot">occasion</span></h2>
+      <p class="intro">Choisissez un modèle, personnalisez les textes, les couleurs et les photos, puis prévisualisez votre invitation avant de la publier.</p>
+    </div>
+    <div class="modeles">
+      <div class="modeles-col">
+        <article class="modele-carte">
+          <img src="/visuels/maquette/photo__modele__mariage__773x600.jpg" alt="Mains des mariés avec alliance">
+          <h3>Mariage</h3>
+          <p>Photos des mariés, programme, dress code, galerie et choix des boissons : tout ce que vos invités doivent savoir avant le grand jour.</p>
+          <a class="lien-souligne" href="/invitations">Utiliser ce modèle</a>
+        </article>
+        <article class="modele-carte">
+          <img src="/visuels/maquette/photo__modele__deuil-et-hommage__773x600.jpg" alt="Hommage avec fleurs blanches">
+          <h3>Deuil et hommage</h3>
+          <p>Un modèle sobre pour informer vos proches du programme, du lieu et des horaires, avec confirmation de présence.</p>
+          <a class="lien-souligne" href="/invitations">Utiliser ce modèle</a>
+        </article>
+      </div>
+      <div class="modeles-col">
+        <a class="voir-tout" href="/invitations">Voir tous les modèles
+          <svg class="ic" aria-hidden="true" viewBox="0 0 48 24"><path d="M2 12h44"/><path d="m36 3 10 9-10 9"/></svg>
+        </a>
+        <article class="modele-carte">
+          <img src="/visuels/maquette/photo__modele__conference__773x600.jpg" alt="Deux intervenants sur scène">
+          <h3>Conférence</h3>
+          <p>Programme, intervenants, lieu et billetterie intégrée pour accueillir vos participants avec un QR code à l'entrée.</p>
+          <a class="lien-souligne" href="/invitations">Utiliser ce modèle</a>
+        </article>
+        <article class="modele-carte">
+          <img src="/visuels/maquette/photo__modele__diner-d-affaires__773x600.jpg" alt="Invités en tenue de soirée">
+          <h3>Dîner d'affaires</h3>
+          <p>Une invitation élégante pour vos partenaires, avec numéro de table, confirmation de présence et contrôle des entrées.</p>
+          <a class="lien-souligne" href="/invitations">Utiliser ce modèle</a>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S05 Questions fréquentes -->
+<section class="section bande" id="faq" aria-labelledby="titre-faq">
+  <div class="anneaux" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="largeur" style="position:relative; z-index:2">
+    <h2 id="titre-faq">Questions fréquentes</h2>
+    <p>Tout ce qu'il faut savoir avant de créer votre premier événement sur Mugi.</p>
+    <div class="faq">
+      <details open>
+        <summary>Mes invités doivent-ils créer un compte ?<span class="rond" aria-hidden="true"><svg class="ic"><use href="/visuels/maquette/icones.svg#chevron-down"/></svg></span></summary>
+        <p>Non. Chaque invité reçoit un lien unique, le plus souvent par WhatsApp. Il ouvre son invitation directement dans son navigateur, choisit sa boisson, puis confirme ou décline sa présence en un clic. Aucun téléchargement ni inscription n'est nécessaire.</p>
+      </details>
+      <details>
+        <summary>Comment se passe le contrôle des entrées le jour de l'événement ?<span class="rond" aria-hidden="true"><svg class="ic"><use href="/visuels/maquette/icones.svg#chevron-down"/></svg></span></summary>
+        <p>Vos agents scannent le QR code de chaque invité avec un simple smartphone. Un QR code déjà utilisé est refusé, et vous suivez les arrivées en direct.</p>
+      </details>
+      <details>
+        <summary>Quels moyens de paiement sont acceptés pour la billetterie ?<span class="rond" aria-hidden="true"><svg class="ic"><use href="/visuels/maquette/icones.svg#chevron-down"/></svg></span></summary>
+        <p>Le mobile money et la carte bancaire sont prévus. La liste exacte des opérateurs sera annoncée à l'ouverture de la billetterie.</p>
+      </details>
+      <details>
+        <summary>Combien coûte une invitation digitale ?<span class="rond" aria-hidden="true"><svg class="ic"><use href="/visuels/maquette/icones.svg#chevron-down"/></svg></span></summary>
+        <p>Les tarifs seront publiés au lancement. Contactez-nous pour en savoir plus.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- S06 Témoignages -->
+<section class="section" id="temoignages" aria-labelledby="titre-temoins">
+  <div class="largeur">
+    <div class="centre">
+      <h2 id="titre-temoins">Ce que disent nos<br><span class="mot">organisateurs</span></h2>
+      <p class="intro" style="font-size:16px">Mariages, conférences, collectes de fonds : ils ont organisé leurs événements avec Mugi.</p>
+    </div>
+    <div class="temoins">
+      <button class="fleche-rond prec" type="button" id="temoin-prec" aria-label="Témoignage précédent" disabled><svg class="ic" aria-hidden="true"><use href="/visuels/maquette/icones.svg#chevron-left"/></svg></button>
+      <div class="temoins-piste" id="temoins-piste" tabindex="0" aria-label="Témoignages">
+        <article class="temoin">
+          <div class="temoin-tete"><span class="avatar" aria-hidden="true"></span><div><strong>Grâce Mbuyi</strong><small>Organisatrice de mariage</small></div></div>
+          <div class="etoiles" aria-label="5 étoiles sur 5"><svg class="ic"><use href="/visuels/maquette/icones.svg#etoile"/></svg><svg class="ic"><use href="/visuels/maquette/icones.svg#etoile"/></svg><svg class="ic"><use href="/visuels/maquette/icones.svg#etoile"/></svg><svg class="ic"><use href="/visuels/maquette/icones.svg#etoile"/></svg><svg class="ic"><use href="/visuels/maquette/icones.svg#etoile"/></svg></div>
+          <p>« Nous avons envoyé toutes nos invitations par WhatsApp et suivi les confirmations en direct. Le jour du mariage, l'accueil s'est fait en quelques secondes grâce au QR code. Nos invités ont adoré découvrir le programme et choisir leur boisson à l'avance. »</p>
+        </article>
+        <article class="temoin">
+          <div class="temoin-tete"><span class="avatar" aria-hidden="true"></span><div><strong>Patrick Kabongo</strong><small>Responsable événementiel</small></div></div>
+          <div class="etoiles" aria-label="5 étoiles sur 5"><svg class="ic"><use href="/visuels/maquette/icones.svg#etoile"/></svg><svg class="ic"><use href="/visuels/maquette/icones.svg#etoile"/></svg><svg class="ic"><use href="/visuels/maquette/icones.svg#etoile"/></svg><svg class="ic"><use href="/visuels/maquette/icones.svg#etoile"/></svg><svg class="ic"><use href="/visuels/maquette/icones.svg#etoile"/></svg></div>
+          <p>« Pour notre conférence, la billetterie en ligne et le paiement par mobile money ont tout simplifié. Nos agents ont scanné les billets depuis leurs téléphones et nous suivions les entrées en temps réel sur le tableau de bord. »</p>
+        </article>
+        <article class="temoin">
+          <div class="temoin-tete"><span class="avatar" aria-hidden="true"></span><div><strong>Sarah Ilunga</strong><small>Présidente d'association</small></div></div>
+          <div class="etoiles" aria-label="5 étoiles sur 5"><svg class="ic"><use href="/visuels/maquette/icones.svg#etoile"/></svg><svg class="ic"><use href="/visuels/maquette/icones.svg#etoile"/></svg><svg class="ic"><use href="/visuels/maquette/icones.svg#etoile"/></svg><svg class="ic"><use href="/visuels/maquette/icones.svg#etoile"/></svg><svg class="ic"><use href="/visuels/maquette/icones.svg#etoile"/></svg></div>
+          <p>« Notre collecte pour la bibliothèque du quartier a atteint son objectif. Les donateurs voyaient la jauge avancer et recevaient leur reçu tout de suite. »</p>
+        </article>
+      </div>
+      <button class="fleche-rond suiv" type="button" id="temoin-suiv" aria-label="Témoignage suivant"><svg class="ic" aria-hidden="true"><use href="/visuels/maquette/icones.svg#chevron-right"/></svg></button>
+    </div>
+    <p class="note-exemple">Témoignages d'exemple, à remplacer par de vrais avis avant la mise en ligne.</p>
+  </div>
+</section>
+
+<!-- S07 Nos conseils -->
+<section class="section" aria-labelledby="titre-conseils" style="padding-top: 0">
+  <div class="largeur">
+    <div class="conseils-tete">
+      <h2 id="titre-conseils">Nos <span class="mot">conseils</span> pour réussir<br>vos événements</h2>
+      <p>Guides pratiques, astuces d'organisation et nouveautés de la plateforme pour réussir vos événements, de l'invitation au bilan.</p>
+    </div>
+    <div class="conseils">
+      <article class="conseil">
+        <h3>Organiser un mariage sans stress</h3>
+        <p>Liste des invités, invitations, confirmations et plan de table : notre méthode étape par étape.</p>
+        <img src="/visuels/maquette/photo__blog__organiser-un-mariage__512x383.jpg" alt="Mariés souriants">
+      </article>
+      <article class="conseil">
+        <h3>Vendre plus de billets pour votre concert</h3>
+        <p>Fixez vos prix, créez des codes promo et partagez votre lien de billetterie au bon moment.</p>
+        <img src="/visuels/maquette/photo__blog__vendre-billets-concert__512x383.jpg" alt="Main tenant un billet">
+      </article>
+      <article class="conseil">
+        <h3>Accueillir vos invités sans file d'attente</h3>
+        <p>Préparez vos agents, testez le scan des QR codes et gérez les sorties et retours en salle.</p>
+        <img src="/visuels/maquette/photo__blog__accueillir-invites__512x383.jpg" alt="Invités qui trinquent sur une terrasse">
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Overlay « Toutes les fonctionnalités » (bouton lecture) -->
+<div class="voile" id="fonctions" hidden>
+  <div class="panneau panneau-fonctions" role="dialog" aria-modal="true" aria-labelledby="titre-fonctions">
+    <div class="panneau-video" aria-hidden="true">
+      <span class="rond-lecture"><svg><use href="/visuels/maquette/icones.svg#play"/></svg></span>
+      <div class="legende"><strong>Découvrez Mugi en 2 minutes</strong><span>Vidéo de présentation · bientôt disponible</span></div>
+    </div>
+    <div class="panneau-liste">
+      <button class="fermer" type="button" id="fermer-fonctions" aria-label="Fermer"><svg class="ic" aria-hidden="true"><use href="/visuels/maquette/icones.svg#x"/></svg></button>
+      <h2 id="titre-fonctions">Toutes les fonctionnalités</h2>
+      <p>Choisissez une fonctionnalité pour découvrir comment elle fonctionne.</p>
+      <a class="ligne-fonction" href="/invitations"><span class="pastille"><svg class="ic"><use href="/visuels/maquette/icones.svg#mail"/></svg></span><span><strong>Invitations digitales</strong><small>Un lien unique par invité, envoyé par WhatsApp.</small></span><svg class="ic fleche" aria-hidden="true"><use href="/visuels/maquette/icones.svg#arrow-right"/></svg></a>
+      <a class="ligne-fonction" href="/billetterie"><span class="pastille"><svg class="ic"><use href="/visuels/maquette/icones.svg#ticket"/></svg></span><span><strong>Billetterie en ligne</strong><small>Billets avec QR code, payés par mobile money ou carte.</small></span><svg class="ic fleche" aria-hidden="true"><use href="/visuels/maquette/icones.svg#arrow-right"/></svg></a>
+      <a class="ligne-fonction" href="/invitations"><span class="pastille"><svg class="ic"><use href="/visuels/maquette/icones.svg#scan-line"/></svg></span><span><strong>Contrôle d'accès QR</strong><small>Scan des entrées depuis un simple smartphone.</small></span><svg class="ic fleche" aria-hidden="true"><use href="/visuels/maquette/icones.svg#arrow-right"/></svg></a>
+      <a class="ligne-fonction" href="/collecte"><span class="pastille"><svg class="ic"><use href="/visuels/maquette/icones.svg#heart-handshake"/></svg></span><span><strong>Collecte de fonds</strong><small>Objectif, jauge de progression et reçus de don.</small></span><svg class="ic fleche" aria-hidden="true"><use href="/visuels/maquette/icones.svg#arrow-right"/></svg></a>
+      <a class="ligne-fonction" href="/petition"><span class="pastille"><svg class="ic"><use href="/visuels/maquette/icones.svg#file-pen-line"/></svg></span><span><strong>Pétitions et sondages</strong><small>Signatures en ligne et compteur en direct.</small></span><svg class="ic fleche" aria-hidden="true"><use href="/visuels/maquette/icones.svg#arrow-right"/></svg></a>
+      <a class="ligne-fonction" href="/marketplace"><span class="pastille"><svg class="ic"><use href="/visuels/maquette/icones.svg#store"/></svg></span><span><strong>Market place</strong><small>Le catalogue des événements ouverts au public.</small></span><svg class="ic fleche" aria-hidden="true"><use href="/visuels/maquette/icones.svg#arrow-right"/></svg></a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  (function () {
+    // Overlay « Toutes les fonctionnalités »
+    var voile = document.getElementById("fonctions");
+    var ouvrir = document.getElementById("ouvrir-fonctions");
+    var fermer = document.getElementById("fermer-fonctions");
+    function montrer(ouvert) {
+      voile.hidden = !ouvert;
+      document.body.style.overflow = ouvert ? "hidden" : "";
+      if (ouvert) { fermer.focus(); } else { ouvrir.focus(); }
+    }
+    ouvrir.addEventListener("click", function () { montrer(true); });
+    fermer.addEventListener("click", function () { montrer(false); });
+    voile.addEventListener("click", function (e) { if (e.target === voile) montrer(false); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !voile.hidden) montrer(false); });
+
+    // Carrousel des témoignages
+    var piste = document.getElementById("temoins-piste");
+    var prec = document.getElementById("temoin-prec");
+    var suiv = document.getElementById("temoin-suiv");
+    function pas() { var c = piste.querySelector(".temoin"); return c ? c.offsetWidth + 32 : 300; }
+    function maj() {
+      prec.disabled = piste.scrollLeft <= 4;
+      suiv.disabled = piste.scrollLeft + piste.clientWidth >= piste.scrollWidth - 4;
+    }
+    prec.addEventListener("click", function () { piste.scrollBy({ left: -pas() }); });
+    suiv.addEventListener("click", function () { piste.scrollBy({ left: pas() }); });
+    piste.addEventListener("scroll", maj, { passive: true });
+    window.addEventListener("resize", maj);
+    maj();
+  })();
+</script>
+{% endblock %}

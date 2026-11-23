@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titre %}Mugi{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900&display=swap" rel="stylesheet">
+  <style>
+    /* =========================================================
+       Mugi : valeurs de la maquette (écran de 1920 px).
+       Les clamp() réduisent tout en douceur jusqu'à 360 px.
+       ========================================================= */
+    :root {
+      --mugi-clair: #C16B2E;
+      --mugi-fonce: #6A2D00;
+      --mugi-noir: #000000;
+      --mugi-blanc: #FFFFFF;
+      --mugi-degrade: linear-gradient(135deg, #C16B2E 0%, #6A2D00 100%);
+      --texte: rgba(0, 0, 0, 0.75);
+      --discret: rgba(0, 0, 0, 0.6);
+      --ligne: rgba(0, 0, 0, 0.1);
+      --marge: clamp(16px, 5.5vw, 88px);
+      --section: clamp(48px, 4.5vw, 80px);
+      --ombre: 0 8px 35px 5px rgba(0, 0, 0, 0.10);
+      --ombre-forte: 0 18px 50px rgba(0, 0, 0, 0.16);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--mugi-noir);
+      background: var(--mugi-blanc);
+      font-family: "DM Sans", "Segoe UI", sans-serif;
+      font-weight: 400;
+      font-size: clamp(15px, 0.85vw, 16px);
+      line-height: 1.5;
+      overflow-x: hidden;
+      /* La maquette Figma utilise DM Sans en taille optique 14 (lettres plus larges).
+         Sans cette ligne, le navigateur prend la version « titrage » plus serrée. */
+      font-variation-settings: "opsz" 14;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    :focus-visible { outline: 3px solid var(--mugi-clair); outline-offset: 3px; }
+    .skip {
+      position: absolute; left: 1rem; top: -4rem;
+      background: var(--mugi-blanc); color: var(--mugi-noir);
+      padding: 0.5rem 0.8rem; z-index: 60;
+    }
+    .skip:focus { top: 1rem; }
+    .sr {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;
+    }
+    .largeur { width: min(1120px, calc(100% - 2 * var(--marge))); margin: 0 auto; }
+    img { max-width: 100%; display: block; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      font-size: clamp(34px, 2.9vw, 50px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      font-variation-settings: "opsz" 40;
+      margin-bottom: 0.45em;
+    }
+    h2 {
+      font-size: clamp(26px, 2.1vw, 36px);
+      line-height: 1.12;
+      font-weight: 700;
+      letter-spacing: 0;
+      margin-bottom: 0.4em;
+    }
+    h3 { font-size: clamp(18px, 1.1vw, 20px); font-weight: 600; line-height: 1.25; margin-bottom: 0.4em; }
+    p { color: var(--texte); font-size: inherit; line-height: 1.55; }
+    /* Mot mis en valeur dans un titre (dégradé marron) */
+    .mot, .accent {
+      background: var(--mugi-degrade);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .ic {
+      width: 24px; height: 24px; flex: none;
+      fill: none; stroke: currentColor; stroke-width: 2;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ---------- Héros + en-tête (l'en-tête est posé sur le héros) ---------- */
+    .hero {
+      position: relative;
+      overflow-x: hidden;
+      background: var(--mugi-degrade);
+      color: var(--mugi-blanc);
+      padding-bottom: clamp(40px, 3.5vw, 64px);
+      /* Même hauteur visuelle pour Accueil / Invitations / Billetterie */
+      --hero-haut: min(52vw, 880px);
+    }
+    .hero > .largeur { position: relative; z-index: 2; }
+    .hero p, .bande p, footer p { color: var(--mugi-blanc); }
+    .haut-barre {
+      display: flex; align-items: center; justify-content: space-between; gap: 1.25rem;
+      padding: clamp(18px, 2vw, 36px) 0 clamp(22px, 2.2vw, 40px);
+      position: relative; z-index: 80;
+    }
+    .logo { display: inline-flex; align-items: center; flex: none; }
+    .logo img { height: clamp(38px, 2.6vw, 48px); width: auto; }
+    .menu-btn {
+      display: none;
+      margin-left: auto;
+      border: 0; border-radius: 14px;
+      background: rgba(106, 45, 0, 0.35);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      color: var(--mugi-blanc);
+      font-size: 16px; font-weight: 600;
+      padding: 12px 16px; cursor: pointer;
+      align-items: center; gap: 8px;
+      position: relative; z-index: 81;
+    }
+    nav.menu {
+      background: rgba(106, 45, 0, 0.35);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 999px;
+      padding: 8px;
+    }
+    nav.menu ul {
+      display: flex; gap: 2px;
+      list-style: none; margin: 0; padding: 0;
+    }
+    nav.menu a {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px clamp(10px, 0.85vw, 15px); border-radius: 999px;
+      color: var(--mugi-blanc);
+      font-size: clamp(14px, 0.9vw, 16px); font-weight: 600; white-space: nowrap;
+      transition: background 0.2s ease;
+    }
+    nav.menu a:hover { background: rgba(255, 255, 255, 0.14); }
+    nav.menu a[aria-current="page"] { background: rgba(255, 255, 255, 0.24); }
+    nav.menu .ic { width: 18px; height: 18px; }
+
+    /* Trois anneaux décoratifs en haut à droite (héros, sections dégradées) */
+    .anneaux { position: absolute; top: 0; right: 0; width: 0; height: 0; pointer-events: none; z-index: 1; }
+    .anneaux i {
+      position: absolute; width: 703px; height: 703px; border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+    }
+    .anneaux i:nth-child(1) { right: -156px; top: -393px; }
+    .anneaux i:nth-child(2) { right: -271px; top: -424px; }
+    .anneaux i:nth-child(3) { right: -386px; top: -457px; }
+    .hero .anneaux i { border-color: rgba(255, 255, 255, 0.35); }
+
+    .hero:has(.hero-grille) {
+      min-height: var(--hero-haut);
+      padding-bottom: 0;
+      display: flex; flex-direction: column;
+    }
+    .hero:has(.hero-grille) > .largeur {
+      flex: 1; display: flex; flex-direction: column;
+    }
+    .hero-grille {
+      display: grid; grid-template-columns: 1.15fr 0.85fr;
+      gap: clamp(32px, 3.4vw, 68px); align-items: center;
+      flex: 1;
+      padding: clamp(24px, 2.5vw, 48px) 0 clamp(48px, 4vw, 80px);
+    }
+    .hero-grille > div > p { font-size: clamp(16px, 0.98vw, 19px); max-width: 40em; }
+    .hero-grille h1 { font-size: clamp(36px, 3vw, 52px); }
+    .fil { color: rgba(255, 255, 255, 0.85); font-size: clamp(14px, 0.81vw, 15px); margin-bottom: 1rem; }
+
+    /* ---------- Boutons ---------- */
+    .bouton {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: clamp(12px, 0.9vw, 14px) clamp(20px, 1.4vw, 26px);
+      border-radius: 14px; border: 0;
+      background: var(--mugi-clair); color: var(--mugi-blanc);
+      font-size: clamp(14px, 0.8vw, 15px); font-weight: 600; line-height: 1.2;
+      cursor: pointer; transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+    }
+    .bouton:hover { background: var(--mugi-fonce); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18); }
+    .bouton-clair { background: var(--mugi-blanc); color: var(--mugi-clair); }
+    .bouton-clair:hover { background: var(--mugi-fonce); color: var(--mugi-blanc); }
+    .bouton-ligne { background: transparent; color: var(--mugi-blanc); padding-left: 0; padding-right: 0; }
+    .bouton-ligne:hover { background: transparent; box-shadow: none; text-decoration: underline; }
+    .bouton-ligne .ic { width: 20px; height: 20px; }
+    .bouton-petit { padding: 10px 18px; border-radius: 12px; font-size: 14px; }
+    .actions-hero { display: flex; flex-wrap: wrap; align-items: center; gap: clamp(12px, 1vw, 18px); margin-top: clamp(20px, 1.6vw, 28px); }
+
+    /* Lien souligné « En savoir plus », « Utiliser ce modèle » */
+    .lien-souligne {
+      display: inline-block; font-weight: 600; color: var(--mugi-fonce);
+      font-size: clamp(15px, 0.8vw, 15px);
+      border-bottom: 1.5px solid currentColor; padding-bottom: 4px;
+      transition: color 0.2s ease;
+    }
+    .lien-souligne:hover { color: var(--mugi-clair); }
+
+    /* ---------- Sections et cartes ---------- */
+    .section { padding: var(--section) 0; background: var(--mugi-blanc); position: relative; }
+    .bande { background: var(--mugi-degrade); color: var(--mugi-blanc); overflow: hidden; }
+    .bande h2 { color: var(--mugi-blanc); }
+    .bande .carte p, .bande .tarif p { color: var(--texte); }
+    .intro { max-width: 40rem; font-size: clamp(15px, 0.85vw, 16px); }
+    .cartes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1.2vw, 22px); margin-top: clamp(24px, 1.8vw, 36px); }
+    .cartes-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 1.2vw, 22px); }
+    .cartes-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .carte {
+      display: block;
+      background: var(--mugi-blanc); color: var(--mugi-noir);
+      border-radius: clamp(18px, 1.2vw, 22px); padding: clamp(18px, 1.4vw, 24px);
+      box-shadow: var(--ombre);
+      border: 2px solid transparent;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .carte:hover { border-color: var(--mugi-clair); box-shadow: var(--ombre-forte); }
+    .carte p { margin: 0; }
+    .icone {
+      width: clamp(44px, 3vw, 52px); height: clamp(44px, 3vw, 52px);
+      border-radius: 14px;
+      display: grid; place-items: center;
+      background: var(--mugi-degrade); color: var(--mugi-blanc);
+      margin-bottom: clamp(14px, 1.2vw, 20px);
+      font-weight: 700; font-size: 1.1rem;
+    }
+    .icone .ic, .icone svg { width: 46%; height: 46%; stroke: var(--mugi-blanc); fill: none; stroke-width: 1.8; }
+    .modele {
+      position: relative; display: block; height: 240px; border-radius: 22px; overflow: hidden;
+      background: #000 center/cover no-repeat; color: var(--mugi-blanc);
+    }
+    .modele::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.85) 100%);
+    }
+    .modele h3 { position: absolute; left: 28px; right: 28px; bottom: 28px; z-index: 1; margin: 0; color: var(--mugi-blanc); }
+
+    /* Éléments utilisés par les autres pages (téléphone, billet, formulaire…) */
+    .telephone {
+      background: var(--mugi-noir); color: var(--mugi-blanc);
+      border-radius: 44px; padding: 12px; max-width: 380px; width: 100%; justify-self: end;
+    }
+    .telephone .ecran { background: var(--mugi-blanc); color: var(--mugi-noir); border-radius: 34px; overflow: hidden; }
+    .telephone img { height: 260px; width: 100%; object-fit: cover; }
+    .telephone .corps { padding: 20px 24px 26px; }
+    .telephone strong { display: block; font-size: 1.5rem; }
+    .telephone small { color: var(--texte); }
+    .choix { display: flex; gap: 0.5rem; margin-top: 1rem; }
+    .choix span {
+      flex: 1; text-align: center; border-radius: 14px;
+      padding: 0.6rem 0.2rem; background: rgba(193, 107, 46, 0.12);
+      font-size: 0.9rem; font-weight: 600;
+    }
+    .choix .oui { background: var(--mugi-clair); color: var(--mugi-blanc); }
+    .formulaire {
+      background: var(--mugi-blanc); color: var(--mugi-noir);
+      border-radius: 40px; padding: clamp(24px, 2.21vw, 42px); box-shadow: var(--ombre);
+    }
+    label { display: block; font-size: 0.95rem; font-weight: 600; margin: 0.9rem 0 0.35rem; }
+    input, select, textarea {
+      width: 100%; border: 1px solid var(--ligne); border-radius: 16px;
+      padding: 0.85rem 1rem; font: inherit; font-size: 1rem;
+      background: var(--mugi-blanc); color: var(--mugi-noir);
+    }
+    textarea { min-height: 8rem; resize: vertical; }
+    .ligne { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+    .types { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .types span {
+      border-radius: 999px; padding: 0.55rem 1rem;
+      background: rgba(193, 107, 46, 0.12); font-size: 0.95rem; font-weight: 600;
+    }
+    .types .choisi { background: var(--mugi-degrade); color: var(--mugi-blanc); }
+    .pied-form { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 1.4rem; }
+    .lien { color: var(--texte); background: none; border: 0; font: inherit; font-weight: 600; cursor: pointer; }
+    .tarifs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 1.78vw, 34px); margin-top: 2rem; }
+    .tarif { background: var(--mugi-blanc); color: var(--mugi-noir); border-radius: 32px; padding: clamp(24px, 1.78vw, 34px); }
+    .tarif p { margin: 0.2rem 0; color: var(--texte); }
+    .tarif strong { font-size: clamp(32px, 2.29vw, 44px); font-weight: 700; line-height: 1; color: var(--mugi-noir); }
+    .barre { height: 10px; border-radius: 99px; background: rgba(193, 107, 46, 0.15); margin: 1rem 0; }
+    .barre i { display: block; height: 100%; border-radius: 99px; background: var(--mugi-clair); }
+
+    /* ---------- Bouton lecture + overlay « Toutes les fonctionnalités » ---------- */
+    .lecture {
+      width: 48px; height: 48px; border-radius: 50%; border: 0;
+      background: var(--mugi-blanc); color: var(--mugi-clair);
+      display: grid; place-items: center; cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+      transition: transform 0.2s ease;
+    }
+    .lecture:hover { transform: scale(1.06); }
+    .lecture svg { width: 40%; height: 40%; fill: currentColor; stroke: none; margin-left: 8%; }
+    .voile {
+      position: fixed; inset: 0; z-index: 50;
+      background: rgba(0, 0, 0, 0.6);
+      display: grid; place-items: center; padding: 16px;
+      animation: fondu 0.3s ease-out;
+    }
+    .voile[hidden] { display: none; }
+    .panneau {
+      width: min(960px, 100%); max-height: calc(100vh - 32px); overflow: auto;
+      background: var(--mugi-blanc); color: var(--mugi-noir);
+      border-radius: 22px; position: relative;
+      animation: entree 0.3s ease-out;
+    }
+    .fermer {
+      position: absolute; top: clamp(16px, 2.46vw, 48px); right: clamp(16px, 2.46vw, 48px); z-index: 2;
+      width: 52px; height: 52px; border: 0; border-radius: 50%;
+      background: rgba(0, 0, 0, 0.06); color: var(--mugi-noir); cursor: pointer;
+      display: grid; place-items: center;
+    }
+    .fermer:hover { background: rgba(193, 107, 46, 0.15); }
+    .ligne-fonction {
+      display: flex; gap: 18px; align-items: center;
+      padding: 18px; border-radius: 20px;
+      transition: background 0.2s ease;
+    }
+    .ligne-fonction:hover { background: rgba(193, 107, 46, 0.1); }
+    .ligne-fonction .pastille {
+      width: 52px; height: 52px; border-radius: 14px; flex: none;
+      display: grid; place-items: center; background: var(--mugi-degrade); color: var(--mugi-blanc);
+    }
+    .ligne-fonction strong { display: block; font-size: clamp(18px, 0.98vw, 19px); font-weight: 500; }
+    .ligne-fonction small { display: block; color: var(--texte); font-size: 15px; }
+    .ligne-fonction .fleche { margin-left: auto; color: var(--mugi-clair); }
+
+    /* ---------- Pied de page ---------- */
+    footer {
+      background: linear-gradient(110deg, #C16B2E 0%, #6A2D00 100%);
+      color: var(--mugi-blanc);
+      padding: var(--section) 0 clamp(28px, 2.12vw, 41px);
+    }
+    .pied {
+      display: grid;
+      grid-template-columns: 1.6fr 0.75fr 1.1fr 1.4fr 1.25fr;
+      gap: clamp(24px, 2.12vw, 41px);
+    }
+    .pied-marque { font-size: clamp(32px, 1.78vw, 34px); font-weight: 700; letter-spacing: 0.01em; display: block; margin-bottom: 1.4rem; line-height: 1; }
+    .pied-texte { font-size: clamp(14px, 0.77vw, 14px); line-height: 1.3; max-width: 330px; }
+    .reseaux { display: flex; gap: 30px; margin-top: clamp(28px, 2.89vw, 54px); }
+    .reseaux .ic { width: 40px; height: 40px; }
+    footer h2 { font-size: clamp(24px, 1.36vw, 26px); letter-spacing: 0; font-weight: 500; color: var(--mugi-blanc); margin-bottom: 1.6rem; }
+    footer ul { list-style: none; margin: 0; padding: 0; }
+    footer li { margin: 0 0 clamp(14px, 0.94vw, 17px); font-size: clamp(18px, 0.98vw, 19px); font-weight: 500; line-height: 1.3; }
+    footer li a:hover { text-decoration: underline; }
+    .news input {
+      border: 0; border-radius: 20px; height: clamp(64px, 3.91vw, 75px);
+      padding: 0 clamp(20px, 1.53vw, 29px);
+      font-size: clamp(18px, 0.98vw, 19px); font-weight: 500; color: var(--mugi-noir);
+    }
+    .news input::placeholder { color: var(--mugi-clair); opacity: 1; }
+    .news .bouton { margin-top: 18px; }
+    .note { color: rgba(255, 255, 255, 0.8); font-size: 14px; margin-top: 12px; }
+    .bas-pied {
+      border-top: 1px solid rgba(255, 255, 255, 0.7);
+      margin-top: clamp(64px, 6.8vw, 131px); padding-top: 32px;
+      text-align: center; font-size: clamp(18px, 0.98vw, 19px); font-weight: 500;
+    }
+
+    @keyframes entree { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    @keyframes fondu { from { opacity: 0; } to { opacity: 1; } }
+    main { animation: entree 0.45s ease-out; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+
+    /* ---------- Tablette et mobile ---------- */
+    @media (max-width: 1360px) {
+      .menu-btn { display: inline-flex; }
+      nav.menu {
+        display: none;
+        position: fixed;
+        top: 72px; left: max(16px, var(--marge)); right: max(16px, var(--marge));
+        z-index: 200;
+        border-radius: 22px; padding: 12px;
+        background: rgba(60, 24, 0, 0.97);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+        max-height: calc(100vh - 96px);
+        overflow: auto;
+      }
+      nav.menu.ouvert { display: block; }
+      nav.menu ul { flex-direction: column; }
+      nav.menu a { width: 100%; font-size: 17px; padding: 14px 16px; }
+      .pied { grid-template-columns: 1fr 1fr 1fr; }
+      .pied > div:first-child { grid-column: 1 / -1; }
+      .pied > form { grid-column: 1 / -1; max-width: 520px; }
+    }
+    @media (max-width: 980px) {
+      .hero:has(.hero-grille) { min-height: 0; }
+      .hero-grille, .cartes, .cartes-4, .cartes-2, .tarifs, .ligne { display: flex; flex-direction: column; }
+      .telephone { justify-self: start; max-width: 320px; }
+      .modele { height: 220px; }
+      .anneaux { transform: scale(0.55); transform-origin: top right; }
+      .hero-grille { padding: 12px 0 40px; gap: 28px; }
+      .hero-grille h1 { font-size: clamp(28px, 7vw, 36px); }
+    }
+    @media (max-width: 600px) {
+      .pied { grid-template-columns: 1fr; }
+      .pied > div:nth-child(4), .pied > form { grid-column: auto; }
+      .bouton { width: 100%; }
+      .actions-hero .bouton-ligne { width: auto; }
+      .logo img { height: 34px; }
+      .haut-barre { padding: 14px 0 18px; }
+    }
+  </style>
+  {% block styles %}{% endblock %}
+</head>
+<body>
+  <a class="skip" href="#contenu">Aller au contenu</a>
+  <header class="hero {% block hero_classe %}{% endblock %}">
+    {% block hero_fond %}<div class="anneaux" aria-hidden="true"><i></i><i></i><i></i></div>{% endblock %}
+    <div class="largeur">
+      <div class="haut-barre">
+        <a class="logo" href="/" aria-label="Mugi, accueil"><img src="/visuels/maquette/logo-mugi.png" alt="Mugi" width="164" height="63"></a>
+        <button class="menu-btn" type="button" id="ouvrir-menu" aria-expanded="false" aria-controls="menu-principal">
+          <svg class="ic" aria-hidden="true"><use href="/visuels/maquette/icones.svg#menu"/></svg> Menu
+        </button>
+        <nav class="menu" id="menu-principal" aria-label="Pages du site">
+          <ul>
+            <li><a href="/" {% if page == "accueil" %}aria-current="page"{% endif %}><svg class="ic" aria-hidden="true"><use href="/visuels/maquette/icones.svg#house"/></svg>Accueil</a></li>
+            <li><a href="/invitations" {% if page == "invitations" %}aria-current="page"{% endif %}><svg class="ic" aria-hidden="true"><use href="/visuels/maquette/icones.svg#mail"/></svg>Invitations</a></li>
+            <li><a href="/billetterie" {% if page == "billetterie" %}aria-current="page"{% endif %}><svg class="ic" aria-hidden="true"><use href="/visuels/maquette/icones.svg#ticket"/></svg>Billetterie</a></li>
+            <li><a href="/collecte" {% if page == "collecte" %}aria-current="page"{% endif %}><svg class="ic" aria-hidden="true"><use href="/visuels/maquette/icones.svg#heart-handshake"/></svg>Collecte</a></li>
+            <li><a href="/petition" {% if page == "petition" %}aria-current="page"{% endif %}><svg class="ic" aria-hidden="true"><use href="/visuels/maquette/icones.svg#file-pen-line"/></svg>Pétition et sondage</a></li>
+            <li><a href="/marketplace" {% if page == "marketplace" %}aria-current="page"{% endif %}><svg class="ic" aria-hidden="true"><use href="/visuels/maquette/icones.svg#store"/></svg>Market place</a></li>
+            <li><a href="/a-propos" {% if page == "a-propos" %}aria-current="page"{% endif %}><svg class="ic" aria-hidden="true"><use href="/visuels/maquette/icones.svg#info"/></svg>À propos</a></li>
+          </ul>
+        </nav>
+      </div>
+      {% block hero %}{% endblock %}
+    </div>
+  </header>
+  <main id="contenu">
+    {% block contenu %}{% endblock %}
+  </main>
+  <footer>
+    <div class="largeur">
+      <div class="pied">
+        <div>
+          <a class="pied-marque" href="/">Mugi</a>
+          <p class="pied-texte">La plateforme qui simplifie vos invitations, votre billetterie et vos collectes, de la création de l'événement jusqu'au rapport final.</p>
+          <div class="reseaux" aria-label="Réseaux sociaux (bientôt)">
+            <svg class="ic" aria-hidden="true"><use href="/visuels/maquette/icones.svg#twitter"/></svg>
+            <svg class="ic" aria-hidden="true"><use href="/visuels/maquette/icones.svg#facebook"/></svg>
+            <svg class="ic" aria-hidden="true"><use href="/visuels/maquette/icones.svg#instagram"/></svg>
+          </div>
+        </div>
+        <div>
+          <h2>Produit</h2>
+          <ul>
+            <li><a href="/invitations">Invitations</a></li>
+            <li><a href="/billetterie">Billetterie</a></li>
+            <li><a href="/collecte">Collecte</a></li>
+            <li><a href="/marketplace">Market place</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Liens utiles</h2>
+          <ul>
+            <li><a href="/#faq">FAQ</a></li>
+            <li><a href="/#temoignages">Témoignages</a></li>
+            <li><a href="/a-propos">À propos</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Coordonnées</h2>
+          <ul>
+            <li>Exemple de la maquette</li>
+            <li>+243 000 000 000</li>
+            <li>contact@mugi.com</li>
+            <li>Kinshasa, RD Congo</li>
+          </ul>
+        </div>
+        <form class="news" onsubmit="return false;">
+          <h2>Newsletter</h2>
+          <label class="sr" for="courriel">Adresse e-mail</label>
+          <input id="courriel" name="courriel" type="email" placeholder="Votre adresse e-mail" autocomplete="email">
+          <button class="bouton bouton-petit" type="button">S'inscrire</button>
+          <p class="note">Exemple : l'inscription n'envoie encore rien.</p>
+        </form>
+      </div>
+      <p class="bas-pied">© 2026 Mugi. Tous droits réservés.</p>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var bouton = document.getElementById("ouvrir-menu");
+      var menu = document.getElementById("menu-principal");
+      if (!bouton || !menu) return;
+      bouton.addEventListener("click", function () {
+        var ouvert = menu.classList.toggle("ouvert");
+        bouton.setAttribute("aria-expanded", ouvert ? "true" : "false");
+      });
+    })();
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

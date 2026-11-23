@@ -1,0 +1,38 @@
+{% extends "donnees/base.html" %}
+{% block titre %}Organiser — Mugi{% endblock %}
+{% block hero %}
+<section class="hero-grille" aria-labelledby="titre">
+  <div>
+    <p class="fil">Étape 1 sur 4</p>
+    <h1 id="titre">Nouvel événement</h1>
+    <p>Décrivez l'événement. L'enregistrement n'est pas encore branché : rien n'est gardé.</p>
+  </div>
+  <form class="formulaire" aria-labelledby="titre">
+    <div class="types" role="group" aria-label="Type d'événement">
+      <span class="choisi">Invitation</span>
+      <span>Billetterie</span>
+      <span>Collecte</span>
+      <span>Pétition</span>
+    </div>
+    <label for="nom">Nom de l'événement</label>
+    <input id="nom" value="Mariage de Grâce &amp; Patrick">
+    <div class="ligne">
+      <div>
+        <label for="date">Date</label>
+        <input id="date" value="Sam 19 déc. 2026">
+      </div>
+      <div>
+        <label for="heure">Heure</label>
+        <input id="heure" value="19:00">
+      </div>
+    </div>
+    <label for="lieu">Lieu</label>
+    <input id="lieu" value="Salle Le Palmier, Kinshasa">
+    <div class="pied-form">
+      <button class="lien" type="button">Enregistrer le brouillon</button>
+      <button class="bouton bouton-plein" type="button">Continuer</button>
+    </div>
+  </form>
+</section>
+{% endblock %}
+{% block contenu %}{% endblock %}

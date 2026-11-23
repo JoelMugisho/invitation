@@ -1,0 +1,25 @@
+{% extends "donnees/base.html" %}
+{% block titre %}Collecte de fonds — Mugi{% endblock %}
+{% block hero %}
+<section class="hero-grille" aria-labelledby="titre">
+  <div>
+    <p class="fil">Accueil / Collecte</p>
+    <h1 id="titre">Une collecte claire et rassurante</h1>
+    <p>Vos donateurs voient où en est la campagne et reçoivent un reçu pour chaque don.</p>
+    <div class="actions-hero"><a class="bouton bouton-clair" href="/organiser">Lancer une collecte</a></div>
+  </div>
+</section>
+{% endblock %}
+{% block contenu %}
+<section class="section">
+  <div class="largeur">
+    <div class="cartes">
+      <article class="carte"><div class="icone">1</div><h3>Objectif chiffré</h3><p>Fixez le montant à atteindre et la date de fin.</p></article>
+      <article class="carte"><div class="icone">2</div><h3>Jauge de progression</h3><p>La page montre l'avancement de la collecte, en direct.</p></article>
+      <article class="carte"><div class="icone">3</div><h3>Reçu de don</h3><p>Chaque donateur reçoit automatiquement un reçu par e-mail.</p></article>
+      <article class="carte"><div class="icone">4</div><h3>Campagne vérifiée</h3><p>La campagne vérifiée est affichée pour votre équipe.</p></article>
+      <article class="carte"><div class="icone">5</div><h3>Rapports et exports</h3><p>Suivez les montants collectés et exportez la liste des dons.</p></article>
+    </div>
+  </div>
+</section>
+{% endblock %}

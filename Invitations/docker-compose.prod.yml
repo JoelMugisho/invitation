@@ -1,0 +1,48 @@
+# Production derrière le Nginx du serveur (TLS géré par Nginx).
+# Usage :
+#   docker compose -f docker-compose.prod.yml --env-file .env up --build -d
+#
+# Nginx pointe vers http://127.0.0.1:8000 (voir deploy/nginx-mugi.eraste.tech.conf).
+
+services:
+  invitations:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-false}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS}
+      USE_X_FORWARDED_HOST: ${USE_X_FORWARDED_HOST:-true}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      TZ: UTC
+    command: ["postgres", "-c", "timezone=UTC"]
+    volumes:
+      - invitations_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    # Pas de port publié : Postgres reste interne au réseau Docker.
+
+volumes:
+  invitations_postgres:

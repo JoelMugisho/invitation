@@ -1,0 +1,81 @@
+{% extends "donnees/base.html" %}
+{% block titre %}À propos — Mugi{% endblock %}
+{% block hero %}
+<section class="hero-grille" aria-labelledby="titre">
+  <div>
+    <p class="fil">Accueil / À propos</p>
+    <h1 id="titre">Mugi, la plateforme qui simplifie vos événements</h1>
+    <p>Nous aidons les organisateurs à créer, promouvoir et gérer leurs événements, des invitations privées à la billetterie publique, depuis une seule interface claire.</p>
+    <div class="actions-hero">
+      <a class="bouton bouton-clair" href="/invitations">Découvrir les invitations</a>
+      <a class="bouton bouton-ligne" href="/#services">Voir nos services</a>
+    </div>
+  </div>
+  <div class="photo modele" style="background-image:url('/visuels/maquette/photo__a-propos__fete__780x651.jpg'); height:min(360px, 42vw); border-radius:22px;" role="img" aria-label="Amis qui fêtent un événement"></div>
+</section>
+{% endblock %}
+{% block contenu %}
+<section class="section" aria-labelledby="titre-mission">
+  <div class="largeur">
+    <h2 id="titre-mission">Notre <span class="mot">mission</span></h2>
+    <p class="intro">Rendre la gestion d'événements accessible à tous : pas besoin d'être expert technique pour envoyer des invitations, suivre les réponses ou contrôler les entrées le jour J.</p>
+    <div class="cartes">
+      <article class="carte">
+        <div class="icone" aria-hidden="true"><svg class="ic"><use href="/visuels/maquette/icones.svg#calendar-plus"/></svg></div>
+        <h3>Créer facilement</h3>
+        <p>Décrivez votre événement, choisissez un modèle et publiez en quelques minutes.</p>
+      </article>
+      <article class="carte">
+        <div class="icone" aria-hidden="true"><svg class="ic"><use href="/visuels/maquette/icones.svg#qr-code"/></svg></div>
+        <h3>Gérer votre public</h3>
+        <p>Invités nommés, RSVP, QR code unique et check-in depuis un smartphone.</p>
+      </article>
+      <article class="carte">
+        <div class="icone" aria-hidden="true"><svg class="ic"><use href="/visuels/maquette/icones.svg#chart-column"/></svg></div>
+        <h3>Suivre en direct</h3>
+        <p>Confirmations, ventes et présence : vous voyez l'état de votre événement en temps réel.</p>
+      </article>
+    </div>
+  </div>
+</section>
+<section class="section bande" aria-labelledby="titre-offre">
+  <div class="anneaux" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="largeur">
+    <h2 id="titre-offre">Ce que propose <span class="mot" style="background:none;color:#fff; -webkit-text-fill-color:#fff;">Mugi</span></h2>
+    <p class="intro">Certaines fonctions sont déjà présentées ; d'autres arrivent bientôt. Aucun tarif ni partenaire de paiement n'est encore officiel.</p>
+    <div class="cartes cartes-2">
+      <article class="carte">
+        <h3>Disponible bientôt — Invitations</h3>
+        <p>Événements privés, lien unique, WhatsApp ou e-mail, RSVP et contrôle d'entrée par QR.</p>
+        <a class="lien-souligne" href="/invitations">En savoir plus</a>
+      </article>
+      <article class="carte">
+        <h3>Bientôt disponible — Billetterie</h3>
+        <p>Événements publics, vente de billets et contrôle à l'entrée. Présenté comme à venir.</p>
+        <a class="lien-souligne" href="/billetterie">En savoir plus</a>
+      </article>
+      <article class="carte">
+        <h3>À venir — Collecte</h3>
+        <p>Campagnes avec objectif, jauge et reçus pour les donateurs.</p>
+        <a class="lien-souligne" href="/collecte">Voir la page</a>
+      </article>
+      <article class="carte">
+        <h3>À venir — Pétitions et Market place</h3>
+        <p>Signatures, sondages et catalogue d'événements ouverts au public.</p>
+        <a class="lien-souligne" href="/petition">Voir la page</a>
+      </article>
+    </div>
+  </div>
+</section>
+<section class="section" aria-labelledby="titre-valeurs">
+  <div class="largeur">
+    <h2 id="titre-valeurs">Nos <span class="mot">priorités</span></h2>
+    <div class="cartes">
+      <article class="carte"><h3>Clarté</h3><p>Des écrans simples, en français, pour que chaque organisateur comprenne ce qu'il fait.</p></article>
+      <article class="carte"><h3>Sécurité progressive</h3><p>Les données sensibles et l'authentification seront protégées côté serveur, étape par étape, sans promesse prématurée.</p></article>
+      <article class="carte"><h3>Mobile d'abord</h3><p>Le site et les futurs outils restent utilisables dès 360 px de largeur.</p></article>
+    </div>
+    <p class="note-exemple" style="margin-top:2rem;color:var(--discret)">Les noms, contacts et exemples affichés sur le site sont des illustrations de la maquette, pas des informations officielles.</p>
+  </div>
+</section>
+{% endblock %}

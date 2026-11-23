@@ -22,8 +22,25 @@ def load_local_env() -> None:
 load_local_env()
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-only-not-for-production")
-DEBUG = False
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+
+
+def _env_flag(name: str, default: str = "false") -> bool:
+    return os.environ.get(name, default).strip().lower() in {"1", "true", "yes", "on"}
+
+
+DEBUG = _env_flag("DJANGO_DEBUG", "false")
+USE_X_FORWARDED_HOST = _env_flag("USE_X_FORWARDED_HOST", "false")
+
+# Exemple production : ALLOWED_HOSTS=mugi.eraste.tech,127.0.0.1,localhost
+_allowed = os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost")
+ALLOWED_HOSTS = [h.strip() for h in _allowed.split(",") if h.strip()]
+
+# Exemple production : CSRF_TRUSTED_ORIGINS=https://mugi.eraste.tech
+_csrf = os.environ.get("CSRF_TRUSTED_ORIGINS", "")
+CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf.split(",") if o.strip()]
+
+# Derrière un reverse proxy HTTPS (Nginx, Traefik…)
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 INSTALLED_APPS = [
     "rest_framework",
